@@ -31,7 +31,29 @@ export class Player {
       return Object.values(rankCounts).includes(3)
     }
     const hasThreeOfAKind = isThreeOfAKind()
-    console.log('hasThreeOfAKind', hasThreeOfAKind)
+
+    const checkForFlush = () => {
+      const suits: string[] = []
+      for (const card of allCards) {
+        suits.push(card.suit)
+      }
+      const suitCounts: { [suit: string]: number } = {}
+      for (const suit of suits) {
+        if (suitCounts[suit]) {
+          suitCounts[suit]++
+        } else {
+          suitCounts[suit] = 1
+        }
+      }
+      const counts = Object.values(suitCounts)
+      for (const count of counts) {
+        if (count === 5) {
+          return true
+        }
+      }
+      return false
+    }
+    const hasFlush = checkForFlush()
 
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
@@ -68,14 +90,14 @@ export class Player {
           betCallback(0)
         }
       } else if (gamePhase === 'flop') {
-        if (hasPair) {
+        if (hasPair || hasThreeOfAKind || hasFlush) {
           const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else {
           betCallback(0)
         }
       } else if (gamePhase === 'turn') {
-        if (hasPair) {
+        if (hasPair || hasThreeOfAKind || hasFlush) {
           const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else if (isHighCards) {
@@ -85,7 +107,7 @@ export class Player {
           betCallback(0)
         }
       } else {
-        if (hasPair) {
+        if (hasPair || hasThreeOfAKind || hasFlush) {
           const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else {
