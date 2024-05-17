@@ -8,7 +8,7 @@ export class Player {
 
     let isHighCards = false
     ourCards.forEach((card: any) => {
-      if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) {
+      if (['A', 'K', 'Q', 'J'].includes(card.rank)) {
         // riskValue += 1
         isHighCards = true
       }
