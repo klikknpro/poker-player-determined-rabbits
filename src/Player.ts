@@ -4,11 +4,11 @@ export class Player {
     const communityCards = gameState.community_cards
     const allCards = [...ourCards, ...communityCards]
 
+    // let riskValue = 0
+
     let isHighCards = false
-    const ourHighCards = []
     ourCards.forEach((card: any) => {
       if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) {
-        ourHighCards.push(card)
         isHighCards = true
       }
     })
@@ -54,10 +54,10 @@ export class Player {
         }
       } else {
         if (hasPair) {
-          const lower = Math.min(betToRaise, betAllIn * 0.5)
+          const lower = Math.min(betToRaise, betAllIn)
           betCallback(lower)
         } else if (isHighCards) {
-          const lower = Math.min(betToCall, betAllIn * 0.3)
+          const lower = Math.min(betToCall, betAllIn)
           betCallback(lower)
         } else {
           betCallback(0)
