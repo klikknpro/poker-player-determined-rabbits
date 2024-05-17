@@ -5,8 +5,10 @@ export class Player {
     const allCards = [...ourCards, ...communityCards]
 
     let isHighCards = false
+    const ourHighCards = []
     ourCards.forEach((card: any) => {
       if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) {
+        ourHighCards.push(card)
         isHighCards = true
       }
     })
@@ -16,8 +18,18 @@ export class Player {
     const uniqueCardRanks = new Set(cardRanks)
     hasPair = uniqueCardRanks.size !== cardRanks.length
 
+    // if (isHighCards) {
+
+    // }
+
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
+    const betAllIn = gameState.players[gameState.in_action].stack
+
+    if (hasPair && isHighCards) {
+      betCallback(betAllIn)
+      return
+    }
 
     if (communityCards.length === 0) {
       // Before flop
