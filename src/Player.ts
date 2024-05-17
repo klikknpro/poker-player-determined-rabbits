@@ -19,15 +19,34 @@ export class Player {
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
 
-    if (hasPair) {
-      betCallback(betToRaise)
-      return
-    } else if (isHighCards) {
-      betCallback(betToCall)
-      return
-    } else {
-      betCallback(0)
-      return
+    if (communityCards.length === 0) {
+      // Before flop
+      if (hasPair || isHighCards) {
+        betCallback(betToRaise)
+      } else {
+        betCallback(0)
+      }
+    } else if (communityCards.length === 3) {
+      // Flop
+      if (hasPair || isHighCards) {
+        betCallback(betToRaise)
+      } else {
+        betCallback(betToCall)
+      }
+    } else if (communityCards.length === 4) {
+      // Turn
+      if (hasPair || isHighCards) {
+        betCallback(betToRaise)
+      } else {
+        betCallback(betToCall)
+      }
+    } else if (communityCards.length === 5) {
+      // River
+      if (hasPair || isHighCards) {
+        betCallback(betToRaise)
+      } else {
+        betCallback(betToCall)
+      }
     }
   }
 
