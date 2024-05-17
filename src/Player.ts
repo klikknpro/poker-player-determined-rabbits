@@ -18,8 +18,7 @@ export class Player {
     const uniqueCardRanks = new Set(cardRanks)
     hasPair = uniqueCardRanks.size !== cardRanks.length
 
-    // if (isHighCards) {
-
+    // const checkForHighPair = () => {
     // }
 
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
@@ -40,8 +39,10 @@ export class Player {
       }
     } else if (communityCards.length === 3) {
       // Flop
-      if (hasPair || isHighCards) {
+      if (hasPair) {
         betCallback(betToRaise)
+      } else if (isHighCards) {
+        betCallback(betToCall)
       } else {
         betCallback(0)
       }
