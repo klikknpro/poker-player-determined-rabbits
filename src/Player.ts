@@ -1,7 +1,12 @@
 export class Player {
   public betRequest(gameState: any, betCallback: (bet: number) => void): void {
-    const ourCards = gameState.players[gameState.in_action].hole_cards
-    const communityCards = gameState.community_cards
+    type Card = {
+      rank: string
+      suit: string
+    }
+
+    const ourCards: Card[] = gameState.players[gameState.in_action].hole_cards
+    const communityCards: Card[] = gameState.community_cards
     const allCards = [...ourCards, ...communityCards]
 
     let isHighCards = false
@@ -11,12 +16,22 @@ export class Player {
       }
     })
 
-    const asd = ourCards.map((card: any) => card.rank)
-
     let hasPair = false
     const cardRanks = allCards.map((card: any) => card.rank)
     const uniqueCardRanks = new Set(cardRanks)
     hasPair = uniqueCardRanks.size !== cardRanks.length
+
+    function isThreeOfAKind(): boolean {
+      const rankCounts = { [ourCards[0].rank]: 1, [ourCards[1].rank]: 1 }
+
+      communityCards.forEach((card) => {
+        rankCounts[card.rank] = (rankCounts[card.rank] || 0) + 1
+      })
+
+      return Object.values(rankCounts).includes(3)
+    }
+    const hasThreeOfAKind = isThreeOfAKind()
+    console.log('hasThreeOfAKind', hasThreeOfAKind)
 
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
@@ -52,7 +67,14 @@ export class Player {
         } else {
           betCallback(0)
         }
-      } else if (gamePhase === 'flop' || gamePhase === 'turn') {
+      } else if (gamePhase === 'flop') {
+        if (hasPair) {
+          const lower = Math.round(Math.min(betToRaise, betAllIn))
+          betCallback(lower)
+        } else {
+          betCallback(0)
+        }
+      } else if (gamePhase === 'turn') {
         if (hasPair) {
           const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
