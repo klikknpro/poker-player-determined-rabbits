@@ -61,7 +61,7 @@ export class Player {
       }
       return false
     }
-    const hasPreFlopPair = checkPreFlopRankPair()
+    const hasPreFlopRankPair = checkPreFlopRankPair()
 
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
@@ -91,7 +91,7 @@ export class Player {
       const { hasPair, isHighCards, gamePhase, betToCall, betToRaise, betAllIn } = props
 
       if (gamePhase === 'pre-flop') {
-        if (hasPair || isHighCards || hasPreFlopPair) {
+        if (hasPair || isHighCards || hasPreFlopRankPair) {
           const lower = Math.round(Math.min(betToCall, betAllIn * 0.3))
           betCallback(lower)
         } else {
