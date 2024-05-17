@@ -9,6 +9,7 @@ export class Player {
     let isHighCards = false
     ourCards.forEach((card: any) => {
       if (['A', 'K', 'Q', 'J', '10'].includes(card.rank)) {
+        // riskValue += 1
         isHighCards = true
       }
     })
@@ -47,17 +48,17 @@ export class Player {
 
       if (gamePhase === 'pre-flop') {
         if (hasPair || isHighCards) {
-          const lower = Math.min(betToCall, betAllIn * 0.3)
+          const lower = Math.round(Math.min(betToCall, betAllIn * 0.3))
           betCallback(lower)
         } else {
           betCallback(0)
         }
       } else {
         if (hasPair) {
-          const lower = Math.min(betToRaise, betAllIn)
+          const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else if (isHighCards) {
-          const lower = Math.min(betToCall, betAllIn)
+          const lower = Math.round(Math.min(betToCall, betAllIn))
           betCallback(lower)
         } else {
           betCallback(0)
