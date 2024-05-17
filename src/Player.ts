@@ -22,7 +22,7 @@ export class Player {
     if (communityCards.length === 0) {
       // Before flop
       if (hasPair || isHighCards) {
-        betCallback(betToRaise)
+        betCallback(betToCall)
       } else {
         betCallback(0)
       }
@@ -31,21 +31,21 @@ export class Player {
       if (hasPair || isHighCards) {
         betCallback(betToRaise)
       } else {
-        betCallback(betToCall)
+        betCallback(0)
       }
     } else if (communityCards.length === 4) {
       // Turn
       if (hasPair || isHighCards) {
         betCallback(betToRaise)
       } else {
-        betCallback(betToCall)
+        betCallback(0)
       }
     } else if (communityCards.length === 5) {
       // River
       if (hasPair || isHighCards) {
         betCallback(betToRaise)
       } else {
-        betCallback(betToCall)
+        betCallback(0)
       }
     }
   }
