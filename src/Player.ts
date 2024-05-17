@@ -2,6 +2,7 @@ export class Player {
   public betRequest(gameState: any, betCallback: (bet: number) => void): void {
     const ourCards = gameState.players[gameState.in_action].hole_cards
     const communityCards = gameState.community_cards
+    const allCards = [...ourCards, ...communityCards]
 
     let isHighCards = false
     ourCards.forEach((card: any) => {
@@ -11,9 +12,9 @@ export class Player {
     })
 
     let hasPair = false
-    const ourCardRanks = ourCards.map((card: any) => card.rank)
-    const uniqueCardRanks = new Set(ourCardRanks)
-    hasPair = uniqueCardRanks.size !== ourCardRanks.length
+    const cardRanks = allCards.map((card: any) => card.rank)
+    const uniqueCardRanks = new Set(cardRanks)
+    hasPair = uniqueCardRanks.size !== cardRanks.length
 
     const betToCall = gameState.current_buy_in - gameState.players[gameState.in_action].bet
     const betToRaise = gameState.current_buy_in - gameState.players[gameState.in_action].bet + gameState.minimum_raise
