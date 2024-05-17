@@ -4,15 +4,14 @@ export class Player {
     const communityCards = gameState.community_cards
     const allCards = [...ourCards, ...communityCards]
 
-    // let riskValue = 0
-
     let isHighCards = false
     ourCards.forEach((card: any) => {
       if (['A', 'K', 'Q', 'J'].includes(card.rank)) {
-        // riskValue += 1
         isHighCards = true
       }
     })
+
+    const asd = ourCards.map((card: any) => card.rank)
 
     let hasPair = false
     const cardRanks = allCards.map((card: any) => card.rank)
@@ -53,12 +52,19 @@ export class Player {
         } else {
           betCallback(0)
         }
-      } else {
+      } else if (gamePhase === 'flop' || gamePhase === 'turn') {
         if (hasPair) {
           const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else if (isHighCards) {
           const lower = Math.round(Math.min(betToCall, betAllIn))
+          betCallback(lower)
+        } else {
+          betCallback(0)
+        }
+      } else {
+        if (hasPair) {
+          const lower = Math.round(Math.min(betToRaise, betAllIn))
           betCallback(lower)
         } else {
           betCallback(0)
